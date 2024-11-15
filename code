@@ -1,0 +1,279 @@
+# 1차원 행렬을 이용한 행렬의 덧셈
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/43f4c680-a7ab-4f2d-b233-d37ec40472ce/5f02ca47-6f44-413f-a0a5-b26dc7ad0c84/image.png)
+
+```jsx
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    double* A;
+    double* B;
+    int a = 0, b = 0, c = 0, d = 0, i = 0, j = 0;
+
+    printf("첫번째 행렬의 크기를 입력해주세요 (a X b) = ");
+    scanf_s("%d %d", &a, &b);
+
+    printf("두번째 행렬의 크기를 입력해주세요 (c X d) = ");
+    scanf_s("%d %d", &c, &d);
+
+    if (a != c || b != d)
+     {
+        printf("행렬의 크기가 같지 않습니다. 두 행렬의 크기가 같아야 합니다.\n");
+        return 1;
+    }
+
+    A = (double*)malloc(a * b * sizeof(double));
+    B = (double*)malloc(c * d * sizeof(double));
+
+    printf("첫번째 행렬 안에 들어갈 %d개의 수를 입력해주세요\n", a * b);
+    for (i = 0; i < a; i++) 
+    {
+        for (j = 0; j < b; j++) 
+        {
+            scanf_s("%lf", &A[b * i + j]);
+        }
+    }
+
+    printf("두번째 행렬 안에 들어갈 %d개의 수를 입력해주세요\n", c * d);
+    for (i = 0; i < c; i++) 
+    {
+        for (j = 0; j < d; j++) 
+        {
+            scanf_s("%lf", &B[d * i + j]);
+        }
+    }
+
+    printf("--------------------------------------------------------------\n");
+    printf("두 행렬의 합은\n");
+    printf("--------------------------------------------------------------\n");
+
+    for (i = 0; i < a; i++) 
+    {
+        for (j = 0; j < b; j++) 
+        {
+            printf("%.2lf  ", A[b * i + j] + B[d * i + j]);
+        }
+        printf("\n");
+    }
+
+    free(A);
+    free(B);
+
+    return 0;
+}
+
+```
+
+---
+
+# 1차원 행렬을 이용한 행렬의 곱셈
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/43f4c680-a7ab-4f2d-b233-d37ec40472ce/1c37862a-017b-4983-b84c-25a4e83b066b/image.png)
+
+```jsx
+#include <stdio.h>
+#include <stdlib.h>
+
+// 행렬 곱셈 함수 정의
+double* matrix_multiplex(double* mat_a, double* mat_b, int rows, int common, int cols) 
+{
+    double* result = (double*)malloc(rows * cols * sizeof(double)); // 결과 행렬
+
+    for (int i = 0; i < rows; i++) 
+    {
+        for (int j = 0; j < cols; j++) 
+        {
+            result[cols * i + j] = 0; 
+            for (int k = 0; k < common; k++) 
+            {
+                result[cols * i + j] += mat_a[common * i + k] * mat_b[cols * k + j];
+            }
+        }
+    }
+    return result;
+}
+
+int main() 
+{
+    double* A;
+    double* B;
+    double* C; 
+    int a = 0, b = 0, c = 0, d = 0;
+
+    printf("첫번째 행렬의 크기를 입력해주세요 (a X b) = ");
+    scanf_s("%d %d", &a, &b);
+
+    printf("두번째 행렬의 크기를 입력해주세요 (c X d) = ");
+    scanf_s("%d %d", &c, &d);
+
+    if (b != c) 
+    {
+        printf("행렬의 곱셈이 불가능합니다. 첫 번째 행렬의 열 개수와 두 번째 행렬의 행 개수가 같아야 합니다.\n");
+        return 1;
+    }
+    
+    A = (double*)malloc(a * b * sizeof(double));
+    B = (double*)malloc(c * d * sizeof(double));
+
+    printf("첫번째 행렬 안에 들어갈 %d개의 수를 입력해주세요\n", a * b);
+    for (int i = 0; i < a; i++) 
+    {
+        for (int j = 0; j < b; j++) 
+        {
+            scanf_s("%lf", &A[b * i + j]);
+        }
+    }
+
+    printf("두번째 행렬 안에 들어갈 %d개의 수를 입력해주세요\n", c * d);
+    for (int i = 0; i < c; i++) 
+    {
+        for (int j = 0; j < d; j++) 
+        {
+            scanf_s("%lf", &B[d * i + j]);
+        }
+    }
+
+    C = matrix_multiplex(A, B, a, b, d);
+
+    printf("--------------------------------------------------------------\n");
+    printf("두 행렬의 곱셈 결과는\n");
+    printf("--------------------------------------------------------------\n");
+
+    for (int i = 0; i < a; i++) 
+    {
+        for (int j = 0; j < d; j++) 
+        {
+            printf("%.2lf  ", C[d * i + j]);
+        }
+        printf("\n");
+    }
+
+    free(A);
+    free(B);
+    free(C);
+
+    return 0;
+}
+
+```
+
+---
+
+# 1차원 행렬을 이용한 행렬의 덧셈과 곱셈
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/43f4c680-a7ab-4f2d-b233-d37ec40472ce/fd0a6336-1aaa-4c21-bdeb-08c0b7722c0b/image.png)
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/43f4c680-a7ab-4f2d-b233-d37ec40472ce/e5ab447a-84cd-44cd-a840-a67fdab638ba/image.png)
+
+```jsx
+
+#include <stdio.h>
+#include <stdlib.h>
+
+double* matrix_multiplex(double* mat_a, double* mat_b, int rows, int common, int cols) 
+{
+    double* result = (double*)malloc(rows * cols * sizeof(double)); 
+
+    for (int i = 0; i < rows; i++) 
+    {
+        for (int j = 0; j < cols; j++) 
+        {
+            result[cols * i + j] = 0; 
+            for (int k = 0; k < common; k++) 
+            {
+                result[cols * i + j] += mat_a[common * i + k] * mat_b[cols * k + j];
+            }
+        }
+    }
+    return result;
+}
+
+int main() 
+{
+    double* A;
+    double* B;
+    double* C; 
+    int a = 0, b = 0, c = 0, d = 0;
+    int choice = 0;
+
+    printf("행렬 덧셈 또는 곱셈을 선택하세요 (1: 덧셈, 2: 곱셈): ");
+    scanf_s("%d", &choice);
+
+    printf("첫번째 행렬의 크기를 입력해주세요 (a X b) = ");
+    scanf_s("%d %d", &a, &b);
+
+    printf("두번째 행렬의 크기를 입력해주세요 (c X d) = ");
+    scanf_s("%d %d", &c, &d);
+
+    if (choice == 1 && (a != c || b != d)) 
+    {
+        printf("행렬의 크기가 같지 않습니다. 두 행렬의 크기가 같아야 합니다.\n");
+        return 1;
+    }
+    else if (choice == 2 && b != c) 
+    {
+        printf("행렬의 곱셈이 불가능합니다. 첫 번째 행렬의 열 개수와 두 번째 행렬의 행 개수가 같아야 합니다.\n");
+        return 1;
+    }
+
+    A = (double*)malloc(a * b * sizeof(double));
+    B = (double*)malloc(c * d * sizeof(double));
+
+    printf("첫번째 행렬 안에 들어갈 %d개의 수를 입력해주세요\n", a * b);
+    for (int i = 0; i < a; i++) 
+    {
+        for (int j = 0; j < b; j++) 
+        {
+            scanf_s("%lf", &A[b * i + j]);
+        }
+    }
+
+    printf("두번째 행렬 안에 들어갈 %d개의 수를 입력해주세요\n", c * d);
+    for (int i = 0; i < c; i++) 
+    {
+        for (int j = 0; j < d; j++) 
+        {
+            scanf_s("%lf", &B[d * i + j]);
+        }
+    }
+
+    printf("--------------------------------------------------------------\n");
+    if (choice == 1) // 덧셈
+    {
+        printf("두 행렬의 합은\n");
+        printf("--------------------------------------------------------------\n");
+
+        for (int i = 0; i < a; i++) 
+        {
+            for (int j = 0; j < b; j++) 
+            {
+                printf("%.2lf  ", A[b * i + j] + B[d * i + j]);
+            }
+            printf("\n");
+        }
+    }
+    else if (choice == 2) // 곱셈
+    {
+        C = matrix_multiplex(A, B, a, b, d);
+        printf("두 행렬의 곱셈 결과는\n");
+        printf("--------------------------------------------------------------\n");
+
+        for (int i = 0; i < a; i++) 
+        {
+            for (int j = 0; j < d; j++) 
+            {
+                printf("%.2lf  ", C[d * i + j]);
+            }
+            printf("\n");
+        }
+        free(C);
+    }
+
+    free(A);
+    free(B);
+
+    return 0;
+}
+
+```
